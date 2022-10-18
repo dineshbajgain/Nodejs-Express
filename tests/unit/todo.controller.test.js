@@ -24,15 +24,23 @@ describe("TodoController.createTodo",()=>{
       expect(TodoModel.create).toBeCalledWith(newTodo);  
     });
 
-    it("should return 201 respose code",()=>{
-      TodoController.createTodo(req, res, next)
+    it("should return 201 respose code",async ()=>{
+      await TodoController.createTodo(req, res, next)
       expect(res.statusCode).toBe(201)
       expect(res._isEndCalled()).toBeTruthy()
     });
 
-    it("should return json body in response",()=>{
+    it("should return json body in response",async ()=>{
       TodoModel.create.mockReturnValue(newTodo);
-      TodoController.createTodo(req, res, next);
+      await TodoController.createTodo(req, res, next);
       expect(res._getJSONData()).toStrictEqual(newTodo);
+    })
+
+    it("should handle errors", async()=>{
+      const errorMessage = {message: "Done property missing"};
+      const rejectPromise = Promise.reject(errorMessage);
+      TodoModel.create.mockReturnValue(rejectPromise);
+      await TodoController.createTodo(req,res,next);
+      expect(next).toBeCalledWith(errorMessage);
     })
 })

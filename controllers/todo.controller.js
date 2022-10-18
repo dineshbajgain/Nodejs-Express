@@ -1,6 +1,10 @@
 const TodoModel = require("../model/todo.model")
 
-exports.createTodo = (req, res, next)=>{
-    const createdTodoModel = TodoModel.create(req.body)
-    res.status(201).json(createdTodoModel);
+exports.createTodo = async (req, res, next)=>{
+    try {
+        const createdTodoModel = await TodoModel.create(req.body)
+        res.status(201).json(createdTodoModel);
+    } catch (err) {
+       next(err)
+    }
 }
