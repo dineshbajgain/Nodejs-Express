@@ -8,7 +8,7 @@ let req, res, next;
 beforeEach(()=>{
   req = httpMocks.createRequest();
   res = httpMocks.createResponse();
-  next = null;
+  next = jest.fn();
 });
 describe("TodoController.createTodo",()=>{
   beforeEach(()=>{
